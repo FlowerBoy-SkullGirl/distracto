@@ -1,0 +1,17 @@
+
+Distracto will be a todo list that serves only a few simple purposes:
+ - It asks what your goals are today
+ - It allows you to enter a list of objectives
+ - It allows you to mark objectives as completed
+ - It allows you to edit entries in the list
+
+
+Implementation details:
+ - The goal list can be a linked list like so
+   node{
+   	char *user_text;
+	int is_completed_flag;
+	node *next;
+   }
+
+
