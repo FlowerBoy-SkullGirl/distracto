@@ -4,6 +4,9 @@
 #define FALSE 0
 #define TRUE 1
 
+#define MAX_GOAL_SIZE 4096
+#define MAX_CONFIG_PATH 4096
+
 // Used for text_modesetting
 extern int _global_text_mode;
 

@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
 
 #include "headers/terminal_mode.h"
 #include "headers/global.h"
+
+struct termios _global_term_flag_state;
 
 void restore_flag_state()
 {

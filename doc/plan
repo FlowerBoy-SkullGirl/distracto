@@ -15,3 +15,22 @@ Implementation details:
    }
 
 
+
+Need to implement:
+	Display header/API
+	 - Splash welcome
+	 - List display
+	 - Live editing of goals
+		PLAN: Use ncurses
+
+
+Need to implement:
+	Config loader
+	 - Obtains values from config file
+	 - Implements and initializes a default config
+	 - Reassigns default variables based on config
+	 	LOW PRIORITY
+
+Need to implement:
+	Modeswitch
+	 - Main loop should allow for switching between adding to the list, removing, and marking as complete

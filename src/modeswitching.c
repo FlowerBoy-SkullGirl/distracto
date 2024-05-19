@@ -1,6 +1,8 @@
 #include "headers/global.h"
 #include "headers/modeswitching.h"
+#include "headers/distracto_errors.h"
 
+int _global_text_mode;
 
 int set_text_mode(int m)
 {
@@ -15,6 +17,7 @@ int set_text_mode(int m)
 			distracto_error("Bad mode");
 			return FUNC_ERROR;
 			break;
+	}
 
 	return FUNC_ERROR;
 }
