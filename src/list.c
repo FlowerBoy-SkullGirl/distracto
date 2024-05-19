@@ -100,3 +100,11 @@ struct lnode *flip_complete_flag(struct lnode *root, int index)
 
 	return flip_complete_flag(root->next, index - 1);
 }
+
+struct lnode *return_node_at_index(struct lnode *root, int index)
+{
+	if (index == 0)
+		return root;
+
+	return return_node_at_index(root->next, index - 1);
+}

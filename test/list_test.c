@@ -25,6 +25,9 @@ int main()
 	
 	append_list_node(root);
 
+	if (return_node_at_index(root, 0)->next != NULL)
+		printf("Next is not null!\n");
+
 	remove_list_node(root, 1);
 
 	if (root->next == NULL)

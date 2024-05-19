@@ -1,6 +1,6 @@
 SOURCE := src/
 HEADERS := src/headers/
-FLAGS := -g
+FLAGS := -lncurses -g
 
 list_test:
 	gcc -o test/list_test -I$(HEADERS) -I$(SOURCE) test/list_test.c src/distracto_errors.c $(FLAGS)

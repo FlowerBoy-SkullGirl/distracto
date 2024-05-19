@@ -19,4 +19,6 @@ struct lnode *update_node_goal(struct lnode *, int, char *);
 
 struct lnode *flip_complete_flag(struct lnode *, int);
 
+struct lnode *return_node_at_index(struct lnode *, int);
+
 #endif
