@@ -36,10 +36,11 @@ char *pop_buffer(char *buffer)
 	return buffer;
 }
 
-int interpret_input(int wchar, char *buffer, int *selection, struct lnode *root)
+int interpret_input(int wchar, char *buffer, int *selection, struct lnode **rootp)
 {
 	int select = *selection;
 	int t_m = current_text_mode();
+	struct lnode *root = *rootp;
 	struct lnode *np = root;
 	switch(wchar){
 		case ':':
@@ -61,14 +62,12 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode *root)
 			}
 			break;
 
-		case 65:
 		case KEY_UP:
 			if (select > 0 && t_m == M_NAVIGATION)
 				*selection = select - 1;
 			
 			break;
 
-		case 66:
 		case KEY_DOWN:
 			if (t_m == M_NAVIGATION && return_node_at_index(root, select)->next != NULL)
 				*selection = select + 1;
@@ -79,6 +78,13 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode *root)
 		case KEY_BACKSPACE:
 			if (t_m == M_EDIT)
 				pop_buffer(buffer);
+			if (t_m == M_NAVIGATION){
+				// If deleting root
+				if (select == 0)
+					*rootp = root->next;
+				remove_list_node(root, select);
+				*selection = select = 0;
+			}
 			break;
 
 		default:
@@ -94,6 +100,7 @@ int main()
 	char *buffer = malloc(MAX_GOAL_SIZE);
 	memset(buffer, '\0', MAX_GOAL_SIZE);
 	struct lnode *root = create_list();
+	struct lnode **rp = &root;
 
 	int selection = 0;
 	int inchar;
@@ -106,7 +113,14 @@ int main()
 
 	while (TRUE){
 		inchar = wgetch(win);
-		interpret_input(inchar, buffer, &selection, root);
+		interpret_input(inchar, buffer, &selection, rp);
+
+		// If the root was deleted, update it and reinitialize if list is now empty
+		root = *rp;
+		if (root == NULL){
+			root = create_list();
+			*rp = root;
+		}
 
 		display_goal_list(win, root, selection, buffer);
 	}

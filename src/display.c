@@ -7,6 +7,8 @@
 #include "headers/global.h"
 #include "headers/modeswitching.h"
 
+#define SIZE_SPLASH 4
+
 //Start the ncurses screen and input control
 WINDOW *initialize_display()
 {
@@ -20,6 +22,13 @@ WINDOW *initialize_display()
 	return newwin(0, 0, 0, 0);
 }
 
+void clear_row(WINDOW *win, int row, int size_row)
+{
+	for (int i = 0; i < size_row; i++){
+		mvwprintw(win, row, i, " ");
+	}
+}
+
 void display_welcome(WINDOW *win)
 {
 	clear();
@@ -31,33 +40,43 @@ void display_goal_list(WINDOW *win, struct lnode *lroot, int selected, char *buf
 {
 	int x = 0;
 	int y = 0;
-	erase();
-	refresh();
+	getmaxyx(win, y, x); 
+	int offset;
 	struct lnode *np = lroot;
 	for (int i = 0; np != NULL; i++){
+		offset = i + SIZE_SPLASH;
+
+		clear_row(win, offset, x);
+
 		if (np->goal == NULL){
 			np = np->next;
 			continue;
 		}
 
+
 		if (i == selected)
 			wattron(win, A_REVERSE);
 
 		if (np->complete_flag == FALSE){
-			mvwprintw(win, i, 0, "Incomplete: ");
+			mvwprintw(win, offset, 0, "Incomplete: ");
 		}else{
-			mvwprintw(win, i, 0, "Complete: ");
+			mvwprintw(win, offset, 0, "Complete:   ");
 		}
-		mvwprintw(win, i, 12, "%d. %s", i + 1, np->goal);
+
+		mvwprintw(win, offset, 12, "%d. %s", i + 1, np->goal);
 
 		wattroff(win, A_REVERSE);
 
 		np = np->next;
 	}
 
+	//in case last item was deleted
+	clear_row(win, ++offset, x);
+	
+
 	if (current_text_mode() == M_EDIT){
-		getmaxyx(win, y, x); 
 		wattron(win, A_REVERSE);
+		clear_row(win, y - 1, x);
 		mvwprintw(win, y - 1, 0, "%s", buffer);
 		wattroff(win, A_REVERSE);
 	}

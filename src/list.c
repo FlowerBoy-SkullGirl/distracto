@@ -36,16 +36,17 @@ struct lnode *free_node_contents(struct lnode *node)
 		return node;
 
 	free(node->goal);
+	node->goal == NULL;
 	return node;
 }
 
 struct lnode *remove_list_node(struct lnode *root, int index)
 {
 	struct lnode *rn = root->next;
-	struct lnode *rnn = rn->next;
 
 	// If we are removing a non-root node
 	if (index == 1){
+		struct lnode *rnn = rn->next;
 		root->next = rnn;
 		if (rn == NULL)
 			return NULL;
