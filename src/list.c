@@ -36,7 +36,6 @@ struct lnode *free_node_contents(struct lnode *node)
 		return node;
 
 	free(node->goal);
-	node->goal == NULL;
 	return node;
 }
 
