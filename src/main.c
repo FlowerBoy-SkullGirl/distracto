@@ -9,6 +9,10 @@
 #include "headers/terminal_mode.h"
 #include "headers/list.h"
 #include "headers/display.h"
+#include "headers/config_loader.h"
+
+// From config_loader.c
+extern struct configs default_config;
 
 char *append_to_buffer(char *buffer, char last)
 {

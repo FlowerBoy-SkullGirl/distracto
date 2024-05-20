@@ -22,6 +22,7 @@ Need to implement:
 	 - List display
 	 - Live editing of goals
 		PLAN: Use ncurses
+		IMPLEMENTED
 
 
 Need to implement:
@@ -34,3 +35,14 @@ Need to implement:
 Need to implement:
 	Modeswitch
 	 - Main loop should allow for switching between adding to the list, removing, and marking as complete
+	 IMPLEMENTED
+
+
+Need to implement:
+	Caching:
+	 - Store goals that are incomplete so that they may be retrieved in the next session
+
+
+Need to implement:
+	Commands:
+	 - Quit session
