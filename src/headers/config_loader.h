@@ -24,5 +24,11 @@ char *append_config_path(char *, char *);
 
 struct config_var *extract_values_from_line(char *);
 
+struct configs *assign_val(struct configs *, struct config_var *);
+
+struct configs *pad_empty_config(struct configs *);
+
+struct configs *init_config();
+
 
 #endif

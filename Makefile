@@ -7,3 +7,6 @@ list_test:
 
 distracto:
 	gcc -o bin/distracto -I$(HEADERS) -I$(SOURCE) $(SOURCE)*.c $(FLAGS) 
+
+deploy:
+	cp bin/distracto ~/Scripts/distracto

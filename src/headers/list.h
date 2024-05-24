@@ -15,6 +15,8 @@ struct lnode *free_node_contents(struct lnode *);
 
 struct lnode *remove_list_node(struct lnode *, int);
 
+struct lnode *destroy_list(struct lnode *);
+
 struct lnode *update_node_goal(struct lnode *, int, char *);
 
 struct lnode *flip_complete_flag(struct lnode *, int);

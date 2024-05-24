@@ -6,13 +6,16 @@
 #include "headers/global.h"
 #include "headers/distracto_errors.h"
 #include "headers/modeswitching.h"
-#include "headers/terminal_mode.h"
+//#include "headers/terminal_mode.h"
 #include "headers/list.h"
 #include "headers/display.h"
 #include "headers/config_loader.h"
+#include "headers/cache.h"
 
 // From config_loader.c
 extern struct configs default_config;
+extern struct termios _global_term_flag_state;
+struct configs *confs;
 
 char *append_to_buffer(char *buffer, char last)
 {
@@ -40,6 +43,46 @@ char *pop_buffer(char *buffer)
 	return buffer;
 }
 
+// Pass the correct values to "write_to_cache"
+int update_cache(struct lnode *rp)
+{
+	char *home_env = get_home_directory();
+	char *cache_file = append_config_path(home_env, confs->cache_path.val);
+
+	write_to_cache(rp, cache_file);
+	if (cache_file != NULL)
+		free(cache_file);
+
+	return 0;
+}
+
+int cleanup_and_exit(struct lnode *rp)
+{
+
+	// If caching is enabled, update cache
+	if (strcmp(confs->cache_incomplete.val, "true") == 0)
+		update_cache(rp);
+
+	endwin();
+	//restore_flag_state(); only needed if terminal_mode is included
+	exit(0);
+	return 0;
+}
+
+int is_command(char *buffer, struct lnode **rp)
+{
+	if (strcmp(buffer, "exit") == 0)
+		cleanup_and_exit(*rp); 
+	if (strcmp(buffer, "q") == 0)
+		cleanup_and_exit(*rp); 
+	if (strcmp(buffer, "clear") == 0){
+		//Set the pointer to root as null if destroy successful
+		*rp = destroy_list(*rp);
+		return TRUE;
+	}
+	return 0;
+}
+
 int interpret_input(int wchar, char *buffer, int *selection, struct lnode **rootp)
 {
 	int select = *selection;
@@ -58,12 +101,24 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode **root
 			if (t_m == M_NAVIGATION){
 				flip_complete_flag(root, select);
 			}
+
 			if (t_m == M_EDIT){
+				// Check if the buffer is a command
+				if (is_command(buffer, rootp)){
+					//Clear buffer if command is interpreted
+					memset(buffer, '\0', MAX_GOAL_SIZE);
+					break;
+				}
+				
 				if (np->goal != NULL)
 					np = append_list_node(root);
 				update_node_goal(np, 0, buffer);
 				memset(buffer, '\0', MAX_GOAL_SIZE);
 			}
+			// If caching is enabled, update cache
+			if (strcmp(confs->cache_incomplete.val, "true") == 0)
+				update_cache(root);
+
 			break;
 
 		case KEY_UP:
@@ -88,6 +143,10 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode **root
 					*rootp = root->next;
 				remove_list_node(root, select);
 				*selection = select = 0;
+
+				// If caching is enabled, update cache
+				if (strcmp(confs->cache_incomplete.val, "true") == 0)
+					update_cache(root);
 			}
 			break;
 
@@ -106,6 +165,14 @@ int main()
 	struct lnode *root = create_list();
 	struct lnode **rp = &root;
 
+	confs = init_config();
+
+	if (strcmp(confs->cache_incomplete.val, "true") == 0){
+		char *home_env = get_home_directory();
+		char *cache_file = append_config_path(home_env, confs->cache_path.val);
+		load_from_cache(root, cache_file);
+	}
+
 	int selection = 0;
 	int inchar;
 	
@@ -114,6 +181,8 @@ int main()
 	display_welcome(win);
 
 	set_text_mode(M_EDIT);
+
+	display_goal_list(win, root, selection, buffer);
 
 	while (TRUE){
 		inchar = wgetch(win);

@@ -66,6 +66,17 @@ struct lnode *remove_list_node(struct lnode *root, int index)
 	return remove_list_node(rn, index - 1);
 }
 
+//Recursively destroy list
+struct lnode *destroy_list(struct lnode *root)
+{
+	if (root->next != NULL)
+		destroy_list(root->next);
+	if (root != NULL)
+		remove_list_node(root, 0);
+
+	return NULL;
+}
+
 struct lnode *update_node_goal(struct lnode *root, int index, char *src)
 {
 	if (index < 0 || root == NULL)
