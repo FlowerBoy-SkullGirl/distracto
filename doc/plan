@@ -22,7 +22,7 @@ Need to implement:
 	 - List display
 	 - Live editing of goals
 		PLAN: Use ncurses
-		IMPLEMENTED
+	IMPLEMENTED
 
 
 Need to implement:
@@ -31,18 +31,23 @@ Need to implement:
 	 - Implements and initializes a default config
 	 - Reassigns default variables based on config
 	 	LOW PRIORITY
+	IMPLEMENTED
 
 Need to implement:
 	Modeswitch
 	 - Main loop should allow for switching between adding to the list, removing, and marking as complete
-	 IMPLEMENTED
+	IMPLEMENTED
 
 
 Need to implement:
 	Caching:
 	 - Store goals that are incomplete so that they may be retrieved in the next session
+	IMPLEMENTED
 
 
 Need to implement:
 	Commands:
 	 - Quit session
+	 IMPLEMENTED
+	 - Update configs
+	 - Reload configs
