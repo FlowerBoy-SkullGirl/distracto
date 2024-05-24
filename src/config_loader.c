@@ -10,6 +10,7 @@ struct configs default_config = {
 	.cache_path = {"cache_path", "/.cache/distracto"},
 	.cache_incomplete = {"cache_incomplete", "true"},
 	.mode_key = {"mode_key", ":"},
+	.auto_nav_mode = {"auto_nav_mode", "true"},
 	.del_key = {"del_key", "KEY_BACKSPACE"}
 };
 
@@ -100,6 +101,8 @@ struct config_var *extract_values_from_line(char *config_line)
 	return cv;
 }
 
+//Abandon faith in switch case, ye who enter here
+
 // Parses which variable is being assigned
 struct configs *assign_val(struct configs *confs, struct config_var *conf_entry)
 {
@@ -125,6 +128,12 @@ struct configs *assign_val(struct configs *confs, struct config_var *conf_entry)
 		confs->mode_key.var = default_config.mode_key.var;
 		confs->mode_key.val = malloc(MAX_GOAL_SIZE);
 		snprintf(confs->mode_key.val, MAX_GOAL_SIZE, conf_entry->val);
+	}
+
+	if (strcmp(conf_entry->var, default_config.auto_nav_mode.var) == 0){
+		confs->auto_nav_mode.var = default_config.auto_nav_mode.var;
+		confs->auto_nav_mode.val = malloc(MAX_GOAL_SIZE);
+		snprintf(confs->auto_nav_mode.val, MAX_GOAL_SIZE, conf_entry->val);
 	}
 
 	if (strcmp(conf_entry->var, default_config.del_key.var) == 0){
@@ -157,6 +166,11 @@ struct configs *pad_empty_config(struct configs *confs)
 	if (confs->mode_key.val == NULL){
 		confs->mode_key.var = default_config.mode_key.var;
 		confs->mode_key.val = default_config.mode_key.val;
+	}
+
+	if (confs->auto_nav_mode.val == NULL){
+		confs->auto_nav_mode.var = default_config.auto_nav_mode.var;
+		confs->auto_nav_mode.val = default_config.auto_nav_mode.val;
 	}
 
 	if (confs->del_key.val == NULL){

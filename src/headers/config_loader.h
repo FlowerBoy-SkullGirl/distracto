@@ -13,6 +13,7 @@ struct configs{
 	struct config_var cache_path;
 	struct config_var cache_incomplete;
 	struct config_var mode_key;
+	struct config_var auto_nav_mode;
 	struct config_var del_key;
 };
 

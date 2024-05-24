@@ -122,12 +122,24 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode **root
 			break;
 
 		case KEY_UP:
+			// If auto nav mode is true, switch to nav mode upon arrow key press
+			if (strcmp(confs->auto_nav_mode.val, "true") == 0){
+				set_text_mode(M_NAVIGATION);
+				t_m = current_text_mode();
+			}
+
 			if (select > 0 && t_m == M_NAVIGATION)
 				*selection = select - 1;
 			
 			break;
 
 		case KEY_DOWN:
+			// If auto nav mode is true, switch to nav mode upon arrow key press
+			if (strcmp(confs->auto_nav_mode.val, "true") == 0){
+				set_text_mode(M_NAVIGATION);
+				t_m = current_text_mode();
+			}
+
 			if (t_m == M_NAVIGATION && return_node_at_index(root, select)->next != NULL)
 				*selection = select + 1;
 			
