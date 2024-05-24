@@ -43,6 +43,11 @@ void display_goal_list(WINDOW *win, struct lnode *lroot, int selected, char *buf
 	getmaxyx(win, y, x); 
 	int offset;
 	struct lnode *np = lroot;
+
+	//Clear display before proceeding in case of clear command for goal list
+	for (int i = SIZE_SPLASH; i < y - 2; i++)
+		clear_row(win, i, x);
+
 	for (int i = 0; np != NULL; i++){
 		offset = i + SIZE_SPLASH;
 
