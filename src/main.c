@@ -107,6 +107,8 @@ int interpret_input(int wchar, char *buffer, int *selection, struct lnode **root
 				if (is_command(buffer, rootp)){
 					//Clear buffer if command is interpreted
 					memset(buffer, '\0', MAX_GOAL_SIZE);
+					//Set selection at 0 in case list is cleared
+					*selection = 0;
 					break;
 				}
 				
